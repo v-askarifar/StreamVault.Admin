@@ -1,0 +1,237 @@
+﻿@model StreamVault.Admin.ViewModels.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Dashboard</h1>
+        <p class="text-muted mb-0">Overview of StreamVault catalogue performance and content distribution.</p>
+    </div>
+
+    <a asp-controller="Catalogue" asp-action="Create" class="btn btn-primary add-content-btn">
+        + Add Content
+    </a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="dashboard-stat-card card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <span class="stat-label">Total Items</span>
+                <h2 class="stat-value">@Model.TotalItems</h2>
+                <p class="stat-note">All catalogue entries</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="dashboard-stat-card card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <span class="stat-label">Total Duration</span>
+                <h2 class="stat-value">@Model.TotalDurationMinutes</h2>
+                <p class="stat-note">Minutes from movies and audiobooks</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="dashboard-stat-card card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <span class="stat-label">Episodes</span>
+                <h2 class="stat-value">@Model.TotalEpisodes</h2>
+                <p class="stat-note">Total series episodes</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="dashboard-stat-card card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <span class="stat-label">Tracks</span>
+                <h2 class="stat-value">@Model.TotalTracks</h2>
+                <p class="stat-note">Total music album tracks</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-12 col-xl-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Content by Type</h5>
+                <div class="chart-container">
+                    <canvas id="contentTypeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-7">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Catalogue Breakdown</h5>
+                <div class="chart-container">
+                    <canvas id="contentBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-12 col-xl-7">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Content Type Summary</h5>
+
+                <div class="dashboard-type-list">
+                    <div class="dashboard-type-row">
+                        <div>
+                            <span class="type-dot bg-primary"></span>
+                            Movie
+                        </div>
+                        <strong>@Model.MovieCount</strong>
+                    </div>
+
+                    <div class="dashboard-type-row">
+                        <div>
+                            <span class="type-dot bg-success"></span>
+                            Series
+                        </div>
+                        <strong>@Model.SeriesCount</strong>
+                    </div>
+
+                    <div class="dashboard-type-row">
+                        <div>
+                            <span class="type-dot bg-warning"></span>
+                            Audiobook
+                        </div>
+                        <strong>@Model.AudiobookCount</strong>
+                    </div>
+
+                    <div class="dashboard-type-row">
+                        <div>
+                            <span class="type-dot bg-danger"></span>
+                            Music Album
+                        </div>
+                        <strong>@Model.MusicAlbumCount</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-5">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3">Recently Released</h5>
+
+                @if (!Model.RecentItems.Any())
+                {
+                    <p class="text-muted mb-0">No recent content found.</p>
+                }
+                else
+                {
+                    <div class="list-group list-group-flush">
+                        @foreach (var item in Model.RecentItems)
+                        {
+                            <a asp-controller="Catalogue"
+                               asp-action="Edit"
+                               asp-route-publicId="@item.PublicId"
+                               class="list-group-item list-group-item-action px-0">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <div>
+                                        <div class="fw-semibold">@item.Title</div>
+                                        <div class="small text-muted">
+                                            @item.ContentType · @item.Genre
+                                        </div>
+                                    </div>
+
+                                    <span class="small text-muted text-nowrap">
+                                        @item.ReleaseDate.ToString("yyyy-MM-dd")
+                                    </span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const labels = ['Movies', 'Series', 'Audiobooks', 'Music Albums'];
+
+        const contentCounts = [
+            @Model.MovieCount,
+            @Model.SeriesCount,
+            @Model.AudiobookCount,
+            @Model.MusicAlbumCount
+        ];
+
+        const chartColors = [
+            '#0d6efd',
+            '#198754',
+            '#ffc107',
+            '#dc3545'
+        ];
+
+        new Chart(document.getElementById('contentTypeChart'), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: contentCounts,
+                    backgroundColor: chartColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        new Chart(document.getElementById('contentBarChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Items',
+                    data: contentCounts,
+                    backgroundColor: chartColors,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+}

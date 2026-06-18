@@ -1,0 +1,35 @@
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<header class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" asp-controller="Dashboard" asp-action="Index">
+            StreamVault Admin
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <nav id="mainNav" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto gap-lg-2">
+                <li class="nav-item">
+                    <a class="nav-link @(currentController == "Dashboard" ? "active-nav-link" : "")"
+                       asp-controller="Dashboard"
+                       asp-action="Index">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link @(currentController == "Catalogue" ? "active-nav-link" : "")"
+                       asp-controller="Catalogue"
+                       asp-action="Index">
+                        Catalogue
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

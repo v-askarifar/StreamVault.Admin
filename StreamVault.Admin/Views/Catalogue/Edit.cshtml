@@ -1,0 +1,30 @@
+﻿@model StreamVault.Admin.ViewModels.CatalogueFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Content";
+}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-9 col-xl-8">
+        <div class="mb-4">
+            <h1 class="fw-bold mb-1">Edit Content</h1>
+            <p class="text-muted mb-0">Update catalogue item details.</p>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form asp-action="Edit"
+                      asp-route-publicId="@Model.PublicId"
+                      method="post"
+                      novalidate>
+                    @Html.AntiForgeryToken()
+                    <partial name="_Form" model="Model" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

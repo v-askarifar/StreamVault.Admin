@@ -1,0 +1,127 @@
+@model StreamVault.Admin.ViewModels.CatalogueFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+<input type="hidden" asp-for="Id" />
+<input type="hidden" asp-for="PublicId" />
+
+<div class="row g-3">
+    <div class="col-12">
+        <h5 class="fw-bold border-bottom pb-2">Basic information</h5>
+    </div>
+
+    <div class="col-12 col-md-6">
+        <label asp-for="ContentType" class="form-label">Content Type</label>
+
+        @if (Model.Id > 0)
+        {
+            <input type="hidden" asp-for="ContentType" id="contentType" />
+            <input value="@Model.ContentTypeDisplayName" class="form-control" disabled />
+            <div class="form-text">Content type cannot be changed after creation.</div>
+        }
+        else
+        {
+            <select asp-for="ContentType" class="form-select" id="contentType">
+                <option value="Movie">Movie</option>
+                <option value="Series">Series</option>
+                <option value="Audiobook">Audiobook</option>
+                <option value="MusicAlbum">Music Album</option>
+            </select>
+        }
+
+        <span asp-validation-for="ContentType" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" maxlength="150" placeholder="Enter content title" autocomplete="off" />
+        <span asp-validation-for="Title" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="3" maxlength="1000" placeholder="Short description"></textarea>
+        <span asp-validation-for="Description" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <label asp-for="ReleaseDate" class="form-label">Release Date</label>
+        <input asp-for="ReleaseDate" type="date" class="form-control" />
+        <span asp-validation-for="ReleaseDate" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <label asp-for="AgeRating" class="form-label">Age Rating</label>
+        <input asp-for="AgeRating" class="form-control" maxlength="20" placeholder="PG, 12A, 18" autocomplete="off" />
+        <span asp-validation-for="AgeRating" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-4">
+        <label asp-for="Genre" class="form-label">Genre</label>
+        <input asp-for="Genre" class="form-control" maxlength="80" placeholder="Drama, Sci-Fi, Music" autocomplete="off" />
+        <span asp-validation-for="Genre" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 mt-4">
+        <h5 class="fw-bold border-bottom pb-2">Type-specific details</h5>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-movie type-audiobook">
+        <label asp-for="DurationMinutes" class="form-label">Duration Minutes</label>
+        <input asp-for="DurationMinutes" class="form-control numeric-only" type="number" min="1" step="1" inputmode="numeric" placeholder="e.g. 120" />
+        <span asp-validation-for="DurationMinutes" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-movie">
+        <label asp-for="Director" class="form-label">Director</label>
+        <input asp-for="Director" class="form-control" maxlength="120" placeholder="e.g. Christopher Nolan" autocomplete="off" />
+        <span asp-validation-for="Director" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-series">
+        <label asp-for="NumberOfSeasons" class="form-label">Number Of Seasons</label>
+        <input asp-for="NumberOfSeasons" class="form-control numeric-only" type="number" min="1" step="1" inputmode="numeric" placeholder="e.g. 3" />
+        <span asp-validation-for="NumberOfSeasons" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-series">
+        <label asp-for="TotalEpisodes" class="form-label">Total Episodes</label>
+        <input asp-for="TotalEpisodes" class="form-control numeric-only" type="number" min="1" step="1" inputmode="numeric" placeholder="e.g. 24" />
+        <span asp-validation-for="TotalEpisodes" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-audiobook">
+        <label asp-for="Author" class="form-label">Author</label>
+        <input asp-for="Author" class="form-control" maxlength="120" placeholder="e.g. James Clear" autocomplete="off" />
+        <span asp-validation-for="Author" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-audiobook">
+        <label asp-for="Narrator" class="form-label">Narrator</label>
+        <input asp-for="Narrator" class="form-control" maxlength="120" placeholder="e.g. Stephen Fry" autocomplete="off" />
+        <span asp-validation-for="Narrator" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-musicalbum">
+        <label asp-for="Artist" class="form-label">Artist</label>
+        <input asp-for="Artist" class="form-control" maxlength="120" placeholder="e.g. Daft Punk" autocomplete="off" />
+        <span asp-validation-for="Artist" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-musicalbum">
+        <label asp-for="TrackCount" class="form-label">Track Count</label>
+        <input asp-for="TrackCount" class="form-control numeric-only" type="number" min="1" step="1" inputmode="numeric" placeholder="e.g. 12" />
+        <span asp-validation-for="TrackCount" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 col-md-6 type-field type-musicalbum">
+        <label asp-for="RecordLabel" class="form-label">Record Label</label>
+        <input asp-for="RecordLabel" class="form-control" maxlength="120" placeholder="e.g. Columbia Records" autocomplete="off" />
+        <span asp-validation-for="RecordLabel" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12 d-flex flex-column flex-sm-row gap-2 justify-content-end mt-4">
+        <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Content</button>
+    </div>
+</div>
