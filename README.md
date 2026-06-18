@@ -8,6 +8,8 @@ A simple ASP.NET Core MVC application for managing a streaming platform catalogu
 * Entity Framework Core
 * SQLite
 * Bootstrap 5
+* jQuery Validation
+* jQuery Unobtrusive Validation
 
 ## Demo
 
@@ -141,7 +143,7 @@ cd StreamVault.Admin
 3. Run the application
 
 ```bash
-dotnet run
+dotnet run --project StreamVault.Admin
 ```
 
 or launch directly from Visual Studio.
